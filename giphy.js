@@ -33,15 +33,23 @@ $(document).ready(function(){
             cardDiv.addClass('col-lg-4')
             cardDiv.addClass('text-center')
 
-            //append the 
+            //append the card to the animals Div and append the rating to the card
             $('#animals').append(cardDiv)
             cardDiv.append(ratingDiv)
+
+            // set variables to grab the images both still and moving. Created an image tag and gave it new source
             let gifURL = response.data[i].images.fixed_height.url
             let gifOne = $("<img>").attr('src', gifURL).attr('alt', 'gif')
-            let gifPause = response.data[i].images.fixed_height_still.url            
+            let gifPause = response.data[i].images.fixed_height_still.url
+            
+            // style the text to the center
             gifOne.addClass('text-center')
+
+            // append the image gif to the card, also add a class to the image
             cardDiv.append(gifOne)
             gifOne.addClass('gif')
+
+            //write the code for setting the attributes based on the image state
             gifOne.attr('data-still', gifPause)
             gifOne.attr('data-animate', gifURL)
             gifOne.attr('data-state', 'animate')
@@ -50,6 +58,7 @@ $(document).ready(function(){
     
     }
 
+    // function to pause and start the gifs
     function pauseAnimateGifs () {
         let state = $(this).attr('data-state')
         if (state === 'still') {
@@ -61,33 +70,39 @@ $(document).ready(function(){
           }
     }
 
+    // function to make all of the buttons
     function renderButtons() {
         let animalButtons = $('#animalButtons')
 
         animalButtons.empty()
 
+        //sort through the array and add a button for each, including adding classes and attribute properties
         topics.forEach(function(topic){
             let button = $('<button>')
             button.addClass('btn')
-            button.addClass('movie-btn')
+            button.addClass('animal-btn')
             button.attr('data-name', topic)
             animalButtons.append(button.text(topic))
         })
     }
     
+    // Add a new animal button
     $('#addAnimal').on('click', function(event){
+        // prevent the form submit default
         event.preventDefault()
 
+        // the button will be the value of the input
         let animal = $('#animalInput').val().trim()
         
+        //add the new animal to the array
         topics.push(animal)
 
+        //run the function to make the buttons
         renderButtons()
     })
-
-    $(document).on('click','.movie-btn', displayAnimalGifs)
+    // set a click function for the button to display the animal Gifs
+    $(document).on('click','.animal-btn', displayAnimalGifs)
     $(document).on('click', '.gif', pauseAnimateGifs)
     
     renderButtons()
-
 })
